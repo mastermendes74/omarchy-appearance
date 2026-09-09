@@ -183,6 +183,11 @@ Panel {
     onFileChanged: reload()
   }
 
+  // The bar sizes this slot from the root's implicit size; without these the
+  // widget mounts with zero width and the icon never appears.
+  implicitWidth: button.implicitWidth
+  implicitHeight: button.implicitHeight
+
   // --------------------------------------------------------------- shell IPC
   IpcHandler {
     target: "pmendes.appearance"
@@ -444,8 +449,12 @@ Panel {
               width: parent.width
               spacing: Style.space(6)
 
-              readonly property real presetWidth: (width - spacing) * 0.62 / root.intervalPresets.length
-              readonly property real customWidth: (width - spacing) * 0.38
+              // "Custom" is a button like the presets; clicking it reveals the
+              // number input on its own row instead of keeping a spinner on
+              // screen always.
+              readonly property int cellCount: root.intervalPresets.length + 1
+              readonly property real cellWidth: (width - spacing * (cellCount - 1)) / cellCount
+              readonly property bool customActive: root.intervalPresets.indexOf(root.intervalMinutes) === -1
 
               Repeater {
                 model: root.intervalPresets
@@ -454,7 +463,7 @@ Panel {
                   required property int modelData
                   required property int index
 
-                  width: intervalRow.presetWidth
+                  width: intervalRow.cellWidth
                   text: modelData + " min"
                   fontSize: Style.font.caption
                   foreground: root.foreground
@@ -463,20 +472,47 @@ Panel {
                   verticalPadding: Style.spacing.controlPaddingY + Style.space(2)
                   bordered: true
                   active: root.intervalMinutes === modelData
-                  onClicked: root.setIntervalMinutes(modelData)
+                  onClicked: {
+                    customField.visible = false
+                    root.setIntervalMinutes(modelData)
+                  }
                 }
               }
 
-              NumberField {
-                width: intervalRow.customWidth
-                value: root.intervalMinutes
-                from: 1
-                to: 1440
-                stepSize: 5
+              Button {
+                width: intervalRow.cellWidth
+                text: "Custom"
+                fontSize: Style.font.caption
                 foreground: root.foreground
                 fontFamily: root.fontFamily
-                fontSize: Style.font.caption
-                onModified: function(v) { root.setIntervalMinutes(v) }
+                horizontalPadding: Style.spacing.controlPaddingX
+                verticalPadding: Style.spacing.controlPaddingY + Style.space(2)
+                bordered: true
+                active: intervalRow.customActive
+                onClicked: {
+                  customField.visible = true
+                  customField.field.forceActiveFocus()
+                }
+              }
+            }
+
+            NumberField {
+              id: customField
+              visible: false
+              width: parent.width
+              fieldWidth: parent.width
+              value: root.intervalMinutes
+              from: 1
+              to: 1440
+              stepSize: 5
+              label: "Custom interval (minutes) — Enter applies"
+              foreground: root.foreground
+              fontFamily: root.fontFamily
+              fontSize: Style.font.caption
+              onModified: function(v) { root.setIntervalMinutes(v) }
+              onVisibleChanged: {
+                if (visible) field.forceActiveFocus()
+                else keyCatcher.forceActiveFocus()
               }
             }
           }
