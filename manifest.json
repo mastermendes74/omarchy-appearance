@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "pmendes.appearance",
+  "id": "mendestein.appearance",
   "name": "Appearance",
-  "version": "1.0.0",
-  "author": "pmendes",
+  "version": "1.1.0",
+  "author": "Mendestein",
   "description": "Theme picker and wallpaper modes: single, per-workspace, or cycling",
   "kinds": [
     "service",

@@ -18,7 +18,7 @@ Item {
   // ---- Shared state (source of truth: the JSON file) ----
   property string mode: "single"
   property int intervalMinutes: 5
-  readonly property string statePath: Quickshell.env("HOME") + "/.local/state/omarchy/pmendes.appearance.json"
+  readonly property string statePath: Quickshell.env("HOME") + "/.local/state/omarchy/mendestein.appearance.json"
 
   // ---- Theme tracking ----
   property string currentTheme: ""

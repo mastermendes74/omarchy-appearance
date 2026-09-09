@@ -20,15 +20,15 @@ import "Model.js" as Model
 // in the same file so the donate button can hide itself forever.
 Panel {
   id: root
-  moduleName: "pmendes.appearance"
-  ipcTarget: "pmendes.appearance"
+  moduleName: "mendestein.appearance"
+  ipcTarget: "mendestein.appearance"
   manageIpc: false
 
   // ------------------------------------------------------------- shared state
   property string mode: "single"
   property int intervalMinutes: 5
   property bool donated: false
-  readonly property string statePath: Quickshell.env("HOME") + "/.local/state/omarchy/pmendes.appearance.json"
+  readonly property string statePath: Quickshell.env("HOME") + "/.local/state/omarchy/mendestein.appearance.json"
 
   // ------------------------------------------------------------------- themes
   property var themes: []
@@ -42,7 +42,7 @@ Panel {
   readonly property string donateUrl:
     "https://www.paypal.com/cgi-bin/webscr?cmd=_donations"
     + "&business=mendestein%40outlook.com"
-    + "&item_name=pmendes.appearance%20omarchy%20plugin"
+    + "&item_name=mendestein.appearance%20omarchy%20plugin"
     + "&currency_code=EUR&no_shipping=1"
 
   // Theme-following presentation. All colors route through the bar facade or
@@ -190,7 +190,7 @@ Panel {
 
   // --------------------------------------------------------------- shell IPC
   IpcHandler {
-    target: "pmendes.appearance"
+    target: "mendestein.appearance"
 
     function open(): void { root.open() }
     function close(): void { root.close() }

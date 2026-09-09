@@ -1,6 +1,6 @@
 # omarchy-appearance
 
-An Omarchy shell bar widget (plugin id: `pmendes.appearance`) that puts theme
+An Omarchy shell bar widget (plugin id: `mendestein.appearance`) that puts theme
 switching and wallpaper control behind one bar icon, styled entirely with the
 active theme's colors.
 
@@ -27,12 +27,12 @@ omarchy plugin add https://github.com/mendestein/omarchy-appearance.git --enable
 ```
 
 The bar widget lands in the right section; move it with
-`omarchy bar move pmendes.appearance --section <left|center|right>`.
+`omarchy bar move mendestein.appearance --section <left|center|right>`.
 
-State file: `~/.local/state/omarchy/pmendes.appearance.json`
+State file: `~/.local/state/omarchy/mendestein.appearance.json`
 (`mode`, `intervalMinutes`, `donated`).
 
-IPC: `omarchy-shell ipc call pmendes.appearance toggle|open|close|setMode <single|workspace|cycle>|setInterval <minutes>`
+IPC: `omarchy-shell ipc call mendestein.appearance toggle|open|close|setMode <single|workspace|cycle>|setInterval <minutes>`
 
 ## License
 
