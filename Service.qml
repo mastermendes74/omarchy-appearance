@@ -34,11 +34,14 @@ Item {
     if (root.mode === "workspace") applyForFocusedWorkspace()
   }
 
-  Component.onCompleted: refreshBackgrounds()
+  Component.onCompleted: {
+    refreshBackgrounds()
+    applyMode()
+  }
 
   function refreshBackgrounds() {
     if (backgroundsProc.running) return
-    backgroundsProc.command = Model.backgroundsCommand()
+    backgroundsProc.command = ["bash", "-c", Model.backgroundsCommand()]
     backgroundsProc.running = true
   }
 
@@ -77,14 +80,20 @@ Item {
   }
 
   // Only the workspace events matter here; data is the workspace name, which
-  // is numeric for the regular 1..9 workspaces this mapping addresses.
+  // is numeric for the regular 1..9 workspaces this mapping addresses. The
+  // state file is re-read on each event: atomic writes (rename) can evade the
+  // file watcher, and a missed write would leave this side acting on a stale
+  // mode forever.
   Connections {
     target: Hyprland
     function onRawEvent(event) {
-      if (root.mode !== "workspace") return
       var name = String(event && event.name ? event.name : "")
-      if (name !== "workspace") return
-      var id = parseInt(String(event && event.data ? event.data : "").trim(), 10)
+      if (name !== "workspace" && name !== "workspacev2") return
+      if (stateFile.loaded) root.loadState(stateFile.text())
+      else stateFile.reload()
+      if (root.mode !== "workspace") return
+      var raw = String(event && event.data ? event.data : "").trim()
+      var id = parseInt(raw.split(",")[0], 10)
       if (!isNaN(id)) root.applyForWorkspace(id)
     }
   }
