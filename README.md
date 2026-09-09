@@ -37,3 +37,20 @@ IPC: `omarchy-shell ipc call mendestein.appearance toggle|open|close|setMode <si
 ## License
 
 MIT
+
+## Remove
+
+```bash
+omarchy plugin remove mendestein.appearance
+```
+
+This unloads the widget from the bar and deletes the plugin folder (a backup
+is kept). The preferences file `~/.local/state/omarchy/mendestein.appearance.json`
+can be deleted manually if you want a fully clean slate.
+
+## Dependencies
+
+- Omarchy (with the omarchy-shell / Quickshell shell) — the plugin is a shell plugin, no extra packages
+- `bash` (bundled with Omarchy) — used for background listing
+
+License: MIT (see LICENSE)
